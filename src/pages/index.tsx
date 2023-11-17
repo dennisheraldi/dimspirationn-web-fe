@@ -4,7 +4,8 @@ import { IndexLayout, pageAnimation } from '@/components/Layout';
 import { Navbar } from '@/components/Navbar';
 import { WorkGrid } from '@/components/Work';
 import { getData } from '@/util/api';
-import { VStack, Image, Box, Flex } from '@chakra-ui/react';
+import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { VStack, Image, Box, Flex, IconButton } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
@@ -40,29 +41,91 @@ export default function Home({
             <Navbar color="black" />
           </Box>
         </Flex>
-        <Link
-          href={`/work/${bannerData[bannerIdx]?.slug}`}
-          style={{ width: '100%' }}
-        >
-          <motion.div
-            animate={{ opacity: [0, 1, 1, 0] }}
-            transition={{
-              duration: 5,
-              times: [0, 0.05, 0.95, 1],
-              ease: 'easeInOut'
+        <Box position="relative" w="100%">
+          <IconButton
+            position="absolute"
+            top="50%"
+            left="5"
+            transform="translateY(-50%)"
+            aria-label="left"
+            zIndex="10"
+            variant="ghost"
+            h="60%"
+            w="10%"
+            icon={
+              <ChevronLeftIcon
+                w={12}
+                h={12}
+                opacity={0}
+                transition={'all 0.2s ease-in-out'}
+              />
+            }
+            onClick={() => {
+              setBannerIdx(
+                (bannerIdx - 1 + bannerData.length) % bannerData.length
+              );
             }}
-            key={bannerData[bannerIdx]?.id}
+            _hover={{
+              bg: 'transparent',
+              '> svg': {
+                opacity: 1,
+                transform: 'scale(1.3)'
+              }
+            }}
+          />
+          <Link
+            href={`/work/${bannerData[bannerIdx]?.slug}`}
+            style={{ width: '100%' }}
           >
-            <Image
-              src={process.env.API_URL + bannerData[bannerIdx]?.url}
-              alt=""
-              objectFit="cover"
-              w="100%"
-              h="100vh"
-              draggable={false}
-            />
-          </motion.div>
-        </Link>
+            <motion.div
+              animate={{ opacity: [0, 1, 1, 0] }}
+              transition={{
+                duration: 5,
+                times: [0, 0.05, 0.95, 1],
+                ease: 'easeInOut'
+              }}
+              key={bannerData[bannerIdx]?.id}
+            >
+              <Image
+                src={process.env.API_URL + bannerData[bannerIdx]?.url}
+                alt=""
+                objectFit="cover"
+                w="100%"
+                h="100vh"
+                draggable={false}
+              />
+            </motion.div>
+          </Link>
+          <IconButton
+            position="absolute"
+            top="50%"
+            right="5"
+            transform="translateY(-50%)"
+            aria-label="right"
+            zIndex="10"
+            variant="ghost"
+            h="60%"
+            w="10%"
+            icon={
+              <ChevronRightIcon
+                w={12}
+                h={12}
+                opacity={0}
+                transition={'all 0.2s ease-in-out'}
+              />
+            }
+            onClick={() => {
+              setBannerIdx((bannerIdx + 1) % bannerData.length);
+            }}
+            _hover={{
+              bg: 'transparent',
+              '> svg': {
+                opacity: 1,
+                transform: 'scale(1.3)'
+              }
+            }}
+          />
+        </Box>
         <Box maxW="1680px" w="100%" m="auto">
           <motion.div
             variants={pageAnimation}

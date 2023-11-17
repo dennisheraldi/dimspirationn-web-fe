@@ -13,7 +13,7 @@ export default function About({
         <Image
           src={process.env.API_URL + aboutData?.imageLink}
           alt=""
-          objectFit="cover"
+          objectFit="fill"
           w="100%"
           h={{ base: 'auto', lg: '500px' }}
           alignSelf="center"
